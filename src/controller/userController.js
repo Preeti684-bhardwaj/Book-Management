@@ -1,5 +1,5 @@
 const userModel = require('../model/userModel');
-const validator = require('../utils/validator');
+const {isValid, isValidRequestBody, isValidEmail,isValidtitle ,isValidMobileNum}= require('../utils/validator');
 const jwt=require('jsonwebtoken')
 const dotenv =require('dotenv').config()
 const {SECRET_KEY}=process.env;
@@ -10,13 +10,14 @@ const createUser = async function (req, res) {
     const { title, name, phone, email, password, address } = userData;
 
     //validations
-    if (!validator.isValidRequestBody(userData)) {
+    if (!isValidRequestBody(userData)) {
       return res.status(400).send({ status: false, message: "No data is present in body" });
     }
     if (!title) {
       return res.status(400).send({ status: false, message: "user title is required" });
     }
-    if (!validator.isValid(title)) {
+    if(!isValidtitle(title)) return res.status(400).send({ status: false,message: "Please provide valid title for the user" });
+    if (!isValid(title)) {
       return res.status(400).send({ status: false, message: "Enter a valid title" });
     }
 
@@ -24,7 +25,7 @@ const createUser = async function (req, res) {
     if (!name) {
       return res.status(400).send({ status: false, message: "user name is required" });
     }
-    if (!validator.isValid(name)) {
+    if (!isValid(name)) {
       return res.status(400).send({ status: false, message: "Enter a valid password" });
     }
 
@@ -35,7 +36,7 @@ const createUser = async function (req, res) {
         .send({ status: false, message: "phone number is required" });
     }
 
-    if (!validator.isValid(phone) || !validator.isValidMobileNum(phone)) {
+    if (!isValid(phone) || !isValidMobileNum(phone)) {
       return res.status(400).send({ status: false, message: "enter valid phoneNumber" });
     }
 
@@ -48,7 +49,7 @@ const createUser = async function (req, res) {
       return res.status(400).send({ status: false, message: "Email is required" });
     }
 
-    if (!validator.isValid(email) || !validator.isValidEmail(email)) {
+    if (!isValid(email) || !isValidEmail(email)) {
       return res.status(400).send({ status: false, message: "Enter a valid email" });
     }
 
@@ -76,7 +77,7 @@ const createUser = async function (req, res) {
 
 const userLogin = async function (req, res) {
   try {
-    if (!validator.isValidRequestBody(req.body)) {
+    if (!isValidRequestBody(req.body)) {
       return res.status(400).send({ status: false, message: "No data is present in body" });
     }
     const { email, password } = req.body;
@@ -85,11 +86,11 @@ const userLogin = async function (req, res) {
       return res.status(400).send({ status: false, message: "Please enter email and password" });
     }
 
-    if (!validator.isValid(email) || !validator.isValidEmail(email)) {
+    if (!isValid(email) || !isValidEmail(email)) {
       return res.status(400).send({ status: false, message: "Enter a valid email" });
     }
 
-    if (!validator.isValid(password)) {
+    if (!isValid(password)) {
       return res.status(400).send({ status: false, message: "Enter a valid password" });
     }
 
@@ -101,7 +102,7 @@ const userLogin = async function (req, res) {
     //generate token
 
     if (userDetail) {
-      const token = jwt.sign({ userId: userDetail._id, exp: 3600 }, SECRET_KEY)
+      const token = jwt.sign({ userId: userDetail._id, exp: 7560606060 }, SECRET_KEY)
 
       return res.status(200).send({ status: true, data: { token: token } })
     } else {

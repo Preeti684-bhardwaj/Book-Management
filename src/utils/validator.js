@@ -5,6 +5,16 @@ const isValid = function (value) {
     if (typeof value === "string" && value.trim().length === 0) return false;
     return true;
   };
+  const isValidRating = function (a){
+    a=a.toString()
+    return a.match(/([1-5])/)
+  }
+  const isValidISBN = function (value) {
+    if (typeof value === "undefined" || value === null) return false;
+    if (typeof value === "number" && value.trim().length === 0) return false;
+    if(!value.match(/^[0-9-]+$/)) return false
+    return true;
+  };
   
   const isValidRequestBody = function (requestBody) {
     return Object.keys(requestBody).length > 0;
@@ -21,5 +31,8 @@ const isValidMobileNum = function (MobileNum) {
     }
     return MobileNum.match(/^[0-9]+$/)
   };
+  function isValidtitle(title){
+    return ["Mr","Mrs","Miss"].includes(title)
+}
 
-module.exports = {isValid, isValidRequestBody, isValidEmail,isValidMobileNum,isValidObjectId}
+module.exports = {isValid,isValidRating,isValidISBN, isValidRequestBody, isValidEmail,isValidMobileNum,isValidObjectId,isValidtitle}
