@@ -110,9 +110,13 @@ const deleteReview = async function(req,res){
         let book= await bookModel.findById({_id:bookId,isDeleted:false})
         if(!book) return res.status(400).send({status:false,message:"Please provide correct bookId or the book is deleted"})
 
-        await reviewModel.findByIdAndUpdate(reviewId,{isDeleted:true})
+        reviewDta=await reviewModel.findByIdAndUpdate(reviewId,{isDeleted:true})
         // if(!delReview) return res.status(400).send({status:false,message:"Already deleted review"})
-        await bookModel.findOneAndUpdate({_id:bookId},{ $inc: { reviews: -1 }},{new:true})
+       
+          if(reviewDta)
+        {
+            await bookModel.findOneAndUpdate({_id:bookId},{ $inc: { reviews: -1 }},{new:true})
+        }
         return res.status(200).send({status: true,message: 'Review deleted succesfully!!'})
 
     }
