@@ -1,5 +1,5 @@
 const userModel = require('../model/userModel');
-const {isValid, isValidRequestBody, isValidEmail,isValidtitle ,isValidMobileNum}= require('../utils/validator');
+const {isValid,isValidRating,isValidISBN, isValidRequestBody, isValidEmail,isValidMobileNum,isValidObjectId,isValidtitle}= require('../utils/validator');
 const jwt=require('jsonwebtoken')
 const dotenv =require('dotenv').config()
 const {SECRET_KEY}=process.env;
@@ -35,15 +35,16 @@ const createUser = async function (req, res) {
         .status(400)
         .send({ status: false, message: "phone number is required" });
     }
+    const isPhone = await userModel.findOne({ phone: phone });
+    if (isPhone) {
+      return res.status(400).send({ status: false, message: "phone no. is already registered" });
+    }
 
     if (!isValid(phone) || !isValidMobileNum(phone)) {
       return res.status(400).send({ status: false, message: "enter valid phoneNumber" });
     }
 
-    const isPhone = await userModel.findOne({ phone: phone });
-    if (isPhone) {
-      return res.status(400).send({ status: false, message: "phone no. is already registered" });
-    }
+    
     // email: {mandatory, valid email, unique},
     if (!email) {
       return res.status(400).send({ status: false, message: "Email is required" });
@@ -60,10 +61,10 @@ const createUser = async function (req, res) {
     if (!password) {
       return res.status(400).send({ status: false, message: "password is required" });
     }
-    if (!validator.isValid(password)) {
+    if (!isValid(password)|| password.length<8 || password.length>15) {
       return res.status(400).send({ status: false, message: "Enter a valid password" });
     }
-    if (!validator.isValid(address)) {
+    if (!isValid(address)) {
       return res.status(400).send({ status: false, message: "Enter a valid address" });
     }
 
