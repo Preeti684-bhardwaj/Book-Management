@@ -1,9 +1,11 @@
 const aws= require("aws-sdk")
+const dotenv =require('dotenv').config()
+const {ACCESS_KEY_ID,SECRET_ACCESS_KEY,REGION}=process.env;
 
 aws.config.update({
-    accessKeyId: "AKIAY3L35MCRZNIRGT6N",
-    secretAccessKey: "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",
-    region: "ap-south-1",
+    accessKeyId: ACCESS_KEY_ID,
+    secretAccessKey:SECRET_ACCESS_KEY,
+    region: REGION,
 })
 let uploadFile= async ( file) =>{
    return new Promise( function(resolve, reject) {
