@@ -1,7 +1,7 @@
 const express=require('express')
 const router=express.Router()
 const {createUser, userLogin  }=require('../controller/userController')
-const {createBook,getBooks,getBookByQuery,updateBookById, deleteBookById}=require('../controller/bookController')
+const {createBook,getBooks,getBookByQuery,updateBookById, deleteBookById,createAwsFile}=require('../controller/bookController')
 const{createReview,updateReview,deleteReview}=require('../controller/reviewController')
 const {authentication,authorization}=require('../middlewares/authMiddleware')
 
@@ -18,5 +18,6 @@ router.post("/books/:bookId/review",createReview)
 router.put("/books/:bookId/review/:reviewId",updateReview)
 router.delete("/books/:bookId/review/:reviewId",deleteReview)
 
+router.post("/write-file-aws",createAwsFile)
 
 module.exports=router

@@ -11,6 +11,28 @@ const {
   isValidObjectId,
   isValidtitle,
 } = require("../utils/validator");
+const aws= require("aws-sdk")
+const {uploadFile}=require ('../aws/aws')
+
+
+const createAwsFile= async function(req, res){
+    try{
+        let files= req.files
+        if(files && files.length>0){
+            //upload to s3 and get the uploaded link
+            // res.send the link back to frontend/postman
+            let uploadedFileURL= await uploadFile( files[0] )
+           return res.status(201).send({msg: "file uploaded succesfully", data: uploadedFileURL})
+        }
+        else{
+          return  res.status(400).send({ msg: "No file found" })
+        }
+
+    }
+    catch(err){
+        res.status(500).send({msg: err})
+    }   
+}
 
 const createBook = async function (req, res) {
   try {
@@ -25,6 +47,7 @@ const createBook = async function (req, res) {
       subcategory,
       reviews,
       releasedAt,
+      bookCover
     } = bookData;
 
     if (!isValidRequestBody(bookData)) {
@@ -323,4 +346,5 @@ module.exports = {
   getBookByQuery,
   updateBookById,
   deleteBookById,
+  createAwsFile
 };
